@@ -14,58 +14,57 @@ import com.smart.sso.rpc.RpcPermission;
 
 /**
  * 当前应用所有权限
- * 
+ *
  * @author Joe
  */
 public class ApplicationPermission {
-	
-	private static final Logger logger = LoggerFactory.getLogger(ApplicationPermission.class);
 
-	// 应用所有权限URL
-	private static Set<String> applicationPermissionSet = null;
-	// 应用所有菜单
-	private static List<RpcPermission> applicationMenuList = null;
-	// 并发监控
-	private static Object monitor = new Object();
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationPermission.class);
 
-	/**
-	 * 1.应用初始化，获取应用所有的菜单及权限 
-	 * 2.权限有变动修改，JMS通知重新加载
-	 */
-	public static void initApplicationPermissions(AuthenticationRpcService authenticationRpcService,
-			String ssoAppCode) {
-		List<RpcPermission> dbList = null;
-		try {
-			dbList = authenticationRpcService.findPermissionList(null, ssoAppCode);
-		}
-		catch (Exception e) {
-			dbList = new ArrayList<RpcPermission>(0);
-			logger.error("无法连接到单点登录鉴权系统,请检查配置sso.server.url", e);
-		}
+    // 应用所有权限URL
+    private static Set<String> applicationPermissionSet = null;
+    // 应用所有菜单
+    private static List<RpcPermission> applicationMenuList = null;
+    // 并发监控
+    private static Object monitor = new Object();
 
-		synchronized (monitor) {
-			applicationMenuList = new ArrayList<RpcPermission>();
-			applicationPermissionSet = new HashSet<String>();
-			for (RpcPermission menu : dbList) {
-				if (menu.getIsMenu()) {
-					applicationMenuList.add(menu);
-				}
-				if (!StringUtils.isEmpty(menu.getUrl())) {
-					applicationPermissionSet.add(menu.getUrl());
-				}
-			}
-		}
-	}
+    /**
+     * 1.应用初始化，获取应用所有的菜单及权限
+     * 2.权限有变动修改，JMS通知重新加载
+     */
+    public static void initApplicationPermissions(AuthenticationRpcService authenticationRpcService,
+                                                  String ssoAppCode) {
+        List<RpcPermission> dbList = null;
+        try {
+            dbList = authenticationRpcService.findPermissionList(null, ssoAppCode);
+        } catch (Exception e) {
+            dbList = new ArrayList<RpcPermission>(0);
+            logger.error("无法连接到单点登录鉴权系统,请检查配置sso.server.url", e);
+        }
 
-	public static Set<String> getApplicationPermissionSet() {
-		synchronized (monitor) {
-			return applicationPermissionSet;
-		}
-	}
+        synchronized (monitor) {
+            applicationMenuList = new ArrayList<RpcPermission>();
+            applicationPermissionSet = new HashSet<String>();
+            for (RpcPermission menu : dbList) {
+                if (Boolean.TRUE.equals(menu.getIsMenu())) {
+                    applicationMenuList.add(menu);
+                }
+                if (!StringUtils.isEmpty(menu.getUrl())) {
+                    applicationPermissionSet.add(menu.getUrl());
+                }
+            }
+        }
+    }
 
-	public static List<RpcPermission> getApplicationMenuList() {
-		synchronized (monitor) {
-			return applicationMenuList;
-		}
-	}
+    public static Set<String> getApplicationPermissionSet() {
+        synchronized (monitor) {
+            return applicationPermissionSet;
+        }
+    }
+
+    public static List<RpcPermission> getApplicationMenuList() {
+        synchronized (monitor) {
+            return applicationMenuList;
+        }
+    }
 }

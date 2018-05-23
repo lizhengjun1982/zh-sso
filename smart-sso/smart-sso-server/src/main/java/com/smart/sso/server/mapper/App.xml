@@ -3,17 +3,17 @@
 <mapper namespace="com.smart.sso.server.dao.AppDao">
 	<select id="get" parameterType="java.lang.Integer" resultType="App">
      	SELECT * 
-     	FROM SYS_APP a
+     	FROM app a
      	WHERE id = #{id}
     </select>
     
 	<insert id="insert" parameterType="App" statementType="PREPARED" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO SYS_APP(
+		INSERT INTO app(
 			name,
 			code,
 			sort,
-			createTime,
-			isEnable
+			create_time,
+			is_enable
 		) 
 		VALUES (
 			#{name},
@@ -25,17 +25,17 @@
 	</insert>
 	
     <update id="update" parameterType="App" statementType="PREPARED">
-		UPDATE SYS_APP a SET
+		UPDATE app a SET
 			a.`name` = #{name},
 			a.`code` = #{code},
 			a.sort = #{sort},
-			a.isEnable = #{isEnable}
+			a.is_enable = #{isEnable}
 		WHERE a.`id` = #{id}
 	</update>
 	
 	<update id="enable" parameterType="Map" statementType="PREPARED">
-		UPDATE SYS_APP a SET
-			a.isEnable = #{isEnable}
+		UPDATE app a SET
+			a.is_enable = #{isEnable}
 		WHERE 1 = 1
 		<if test="idList != null">
 			AND a.`id` in <foreach collection="idList" item="item" open="(" separator="," close=")">#{item}</foreach>
@@ -44,26 +44,26 @@
 	
 	<select id="findPaginationByName" parameterType="Map" resultType="App">   
 		SELECT * 
-     	FROM SYS_APP a
+     	FROM app a
      	WHERE 1 = 1
      	<if test="name != null and name != '' ">
 			AND a.name like CONCAT('%',#{name},'%')
 		</if>
 		<if test="isEnable != null">
-			AND a.isEnable = #{isEnable} 
+			AND a.is_enable = #{isEnable}
 		</if>
-     	ORDER BY a.sort DESC, a.createTime DESC 
+     	ORDER BY a.sort DESC, a.create_time DESC 
 	</select>
 	
 	<select id="findByCode" parameterType="Map" resultType="App">   
 		SELECT * 
-     	FROM SYS_APP a
+     	FROM app a
      	WHERE 1 = 1
 		AND a.code = #{code} 
 	</select>
 	
 	<delete id="deleteById" parameterType="list" statementType="PREPARED">
-		DELETE FROM SYS_APP
+		DELETE FROM app
 		<choose>
 			<when test="list == null or list.size() == 0">
 				WHERE 1 != 1

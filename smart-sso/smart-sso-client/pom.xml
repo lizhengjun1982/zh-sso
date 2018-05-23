@@ -10,6 +10,9 @@
 	<artifactId>smart-sso-client</artifactId>
 	<packaging>jar</packaging>
 	<name>${project.artifactId}</name>
+	<properties>
+		<fastjson.version>1.2.12</fastjson.version>
+	</properties>
 
 	<dependencies>
 		<!-- J2EE支持 -->
@@ -53,6 +56,27 @@
 		<dependency>
 			<groupId>com.caucho</groupId>
 			<artifactId>hessian</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>${fastjson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.7</version>
 		</dependency>
 	</dependencies>
 </project>

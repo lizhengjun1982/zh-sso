@@ -3,20 +3,20 @@
 <mapper namespace="com.smart.sso.server.dao.PermissionDao">
 	<select id="get" parameterType="java.lang.Integer" resultType="Permission">
      	SELECT * 
-     	FROM SYS_PERMISSION a
+     	FROM permission a
      	WHERE id = #{id}
     </select>
     
 	<insert id="insert" parameterType="Permission" statementType="PREPARED" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO SYS_PERMISSION(
-			appId,
-			parentId,
+		INSERT INTO permission(
+			app_id,
+			parent_id,
 			icon,
 			name,
 			url,
 			sort,
-			isMenu,
-			isEnable
+			is_menu,
+			is_enable
 		) 
 		VALUES (
 			#{appId},
@@ -31,21 +31,21 @@
 	</insert>
 	
     <update id="update" parameterType="Permission" statementType="PREPARED">
-		UPDATE SYS_PERMISSION a SET
-			a.`appId` = #{appId},
-			a.`parentId` = #{parentId},
+		UPDATE permission a SET
+			a.`app_id` = #{appId},
+			a.`parent_id` = #{parentId},
 			a.`icon` = #{icon},
 			a.`name` = #{name},
 			a.`url` = #{url},
 			a.`sort` = #{sort},
-			a.`isMenu` = #{isMenu},
-			a.isEnable = #{isEnable}
+			a.`is_menu` = #{isMenu},
+			a.is_enable = #{isEnable}
 		WHERE a.`id` = #{id}
 	</update>
 	
 	<update id="enable" parameterType="map" statementType="PREPARED">
-		UPDATE SYS_PERMISSION a SET
-			a.isEnable = #{isEnable}
+		UPDATE permission a SET
+			a.is_enable = #{isEnable}
 		WHERE 1 = 1
 		<if test="idList != null">
 			AND a.`id` in <foreach collection="idList" item="item" open="(" separator="," close=")">#{item}</foreach>
@@ -54,19 +54,19 @@
 	
 	<select id="findByAppId" parameterType="map" resultType="Permission">   
 		SELECT * 
-     	FROM SYS_PERMISSION a
+     	FROM permission a
      	WHERE 1 = 1
 		<if test="appId != null">
-			AND a.appId = #{appId} 
+			AND a.app_id = #{appId}
 		</if>
 		<if test="isEnable != null and isEnable == true">
-			AND a.isEnable = #{isEnable} 
+			AND a.is_enable = #{isEnable} 
 		</if>
      	ORDER BY a.sort DESC 
 	</select>
 	
 	<delete id="deleteById" parameterType="list" statementType="PREPARED">
-		DELETE FROM SYS_PERMISSION
+		DELETE FROM permission
 		<choose>
 			<when test="list == null or list.size() == 0">
 				WHERE 1 != 1
@@ -81,40 +81,40 @@
 	</delete>
 	
 	<delete id="deleteByAppIds" parameterType="map" statementType="PREPARED">
-		DELETE FROM SYS_PERMISSION
+		DELETE FROM permission
 		WHERE 1 = 1
 		<if test="idList != null">
-			AND appId in <foreach collection="idList" item="item" open="(" separator="," close=")">#{item}</foreach>
+			AND app_id in <foreach collection="idList" item="item" open="(" separator="," close=")">#{item}</foreach>
 		</if>
 	</delete>
 	
 	<select id="findListById" parameterType="map" resultType="com.smart.sso.rpc.RpcPermission">   
      	SELECT DISTINCT
      		   p.id,
-		       p.parentId,
+		       p.parent_id,
 		       p.name,
 		       p.url,
 		       p.icon,
-		       p.isMenu,
+		       p.is_menu,
 		       p.sort
-		FROM   SYS_PERMISSION p
+		FROM   permission p
 		<if test="userId != null">
-			   INNER JOIN SYS_RE_ROLE_PERMISSION rp ON p.id = rp.permissionId
-			   INNER JOIN SYS_ROLE r ON r.id = rp.roleId AND r.isEnable = 1
-			   INNER JOIN SYS_RE_USER_ROLE ur ON ur.roleId = r.id
+			   INNER JOIN role_permission rp ON p.id = rp.permission_id
+			   INNER JOIN role r ON r.id = rp.role_id AND r.is_enable = 1
+			   INNER JOIN user_role ur ON ur.role_id = r.id
 		</if>
 		WHERE  1 = 1
-		       AND p.isEnable = 1
+		       AND p.is_enable = 1
 		       <if test="appCode != null">
 			       AND EXISTS (SELECT 1
-			                   FROM   SYS_APP a
-			                   WHERE  a.id = p.appId
-			                          AND a.isEnable = 1
+			                   FROM   app a
+			                   WHERE  a.id = p.app_id
+			                          AND a.is_enable = 1
 			                          AND a.code = #{appCode})
 			   </if>
 		       <if test="userId != null">
-			   		AND ur.userId = #{userId}
+			   		AND ur.user_id = #{userId}
 			   </if>
-		ORDER  BY p.parentId ASC, p.sort DESC			
+		ORDER  BY p.parent_id ASC, p.sort DESC			
 	</select>
 </mapper>

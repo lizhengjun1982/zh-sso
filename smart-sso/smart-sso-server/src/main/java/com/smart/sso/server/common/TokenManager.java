@@ -10,7 +10,7 @@ import java.util.TimerTask;
  */
 public abstract class TokenManager {
 	
-	public static final String TOKEN = "token";
+	public static final String TOKEN = "fuxiyun_sso_token";
 
 	// 令牌有效期，单位为秒，默认30分钟
 	protected int tokenTimeout = 1800;

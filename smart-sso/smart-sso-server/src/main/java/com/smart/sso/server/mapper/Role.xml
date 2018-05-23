@@ -3,16 +3,16 @@
 <mapper namespace="com.smart.sso.server.dao.RoleDao">
 	<select id="get" parameterType="java.lang.Integer" resultType="Role">
      	SELECT * 
-     	FROM SYS_ROLE a
+     	FROM role a
      	WHERE id = #{id}
     </select>
     
 	<insert id="insert" parameterType="Role" statementType="PREPARED" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO SYS_ROLE(
+		INSERT INTO role(
 			name,
 			sort,
 			description,
-			isEnable
+			is_enable
 		) 
 		VALUES (
 			#{name},
@@ -23,17 +23,17 @@
 	</insert>
 	
     <update id="update" parameterType="Role" statementType="PREPARED">
-		UPDATE SYS_ROLE a SET
+		UPDATE role a SET
 			a.`name` = #{name},
 			a.`sort` = #{sort},
 			a.`description` = #{description},
-			a.isEnable = #{isEnable}
+			a.is_enable = #{isEnable}
 		WHERE a.`id` = #{id}
 	</update>
 	
 	<update id="enable" parameterType="map" statementType="PREPARED">
-		UPDATE SYS_ROLE a SET
-			a.isEnable = #{isEnable}
+		UPDATE role a SET
+			a.is_enable = #{isEnable}
 		WHERE 1 = 1
 		<if test="idList != null">
 			AND a.`id` in <foreach collection="idList" item="item" open="(" separator="," close=")">#{item}</foreach>
@@ -42,19 +42,19 @@
 	
 	<select id="findPaginationByName" parameterType="map" resultType="Role">   
 		SELECT * 
-     	FROM SYS_ROLE a
+     	FROM role a
      	WHERE 1 = 1
      	<if test="name != null and name != '' ">
 			AND a.name like CONCAT('%',#{name},'%')
 		</if>
 		<if test="isEnable != null">
-			AND a.isEnable = #{isEnable} 
+			AND a.is_enable = #{isEnable}
 		</if>
      	ORDER BY a.sort DESC 
 	</select>
 	
 	<delete id="deleteById" parameterType="list" statementType="PREPARED">
-		DELETE FROM SYS_ROLE
+		DELETE FROM role
 		<choose>
 			<when test="list == null or list.size() == 0">
 				WHERE 1 != 1
