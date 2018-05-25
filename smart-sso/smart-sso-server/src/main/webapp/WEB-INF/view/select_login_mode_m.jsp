@@ -32,9 +32,9 @@
             <a href="${weiXinAuthorizeURL}"
                class="weui-btn weui-btn_primary">微信登录</a>
             <a href="javascript:history.back();"
-               class="weui-btn weui-btn_primary">手机号登录</a>
+               class="weui-btn weui-btn_primary">账号登录</a>
             <a
-                    href="javascript:history.back();" class="weui-btn weui-btn_default">手机号快捷注册</a>
+                    href="javascript:history.back();" class="weui-btn weui-btn_default">账号注册</a>
         </p>
     </div>
 </div>

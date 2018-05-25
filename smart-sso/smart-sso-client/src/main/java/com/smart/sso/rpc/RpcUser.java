@@ -16,6 +16,7 @@ public class RpcUser implements Serializable {
     private int userId;
 
     public RpcUser(int userId, String account) {
+
         super();
         this.userId = userId;
         this.account = account;
