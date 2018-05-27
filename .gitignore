@@ -10,3 +10,4 @@ target
 
 catalina.home_IS_UNDEFINED
 *.war
+smart-sso/smart-sso-server/deploy/dev/jdbc.properties
